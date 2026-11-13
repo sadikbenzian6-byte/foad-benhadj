@@ -45,6 +45,53 @@ window.change = function(id, d) {
   cart[id] = Math.max(0, (cart[id] || 0) + d);
   if (!cart[id]) delete cart[id];
   render();
+};
+
+function render() {
+  let entries = Object.entries(cart).filter(
+    ([id, q]) => q && ps.some(p => String(p.id) === String(id))
+  );
+
+  let g = 0;
+  let i = 0;
+
+  document.getElementById('cart').innerHTML = entries.length
+    ? entries.map(([id, q]) => {
+        let p = ps.find(x => String(x.id) === String(id));
+
+        let price = Number(p.price || 0);
+        let installPrice = Number(p.install_price || 0);
+
+        g += price * q;
+        i += installPrice * q;
+
+        return `
+          <div class="item">
+            <b>${esc(p.name)}</b>
+            <div class="muted">
+              سلع ${money(price * q)} — تركيب ${money(installPrice * q)}
+            </div>
+            <div class="qty">
+              <button class="secondary" onclick="change('${esc(id)}',-1)">−</button>
+              ${q}
+              <button onclick="change('${esc(id)}',1)">＋</button>
+            </div>
+          </div>
+        `;
+      }).join('')
+    : 'السلة فارغة';
+
+  document.getElementById('goods').textContent = money(g);
+  document.getElementById('install').textContent = money(i);
+  document.getElementById('grand').textContent = money(g + i);
+}
+};
+
+window.change = function(id, d) {
+  id = String(id);
+  cart[id] = Math.max(0, (cart[id] || 0) + d);
+  if (!cart[id]) delete cart[id];
+  render();
 function render(){let entries=Object.entries(cart).filter(([id,q])=>q&&ps.some(p=>String(p.id)===String(id))))),g=0,i=0;document.getElementById('cart').innerHTML=entries.length?entries.map(([id,q])=>{let p=ps.find(x=>x.id===id);g+=p.price*q;i+=p.install_price*q;return `<div class="item"><b>${esc(p.name)}</b><div class="muted">سلع ${money(p.price*q)} — تركيب ${money(p.install_price*q)}</div><div class="qty"><button class="secondary" onclick="change('${id}',-1)">−</button>${q}<button onclick="change('${id}',1)">＋</button></div></div>`}).join(''):'السلة فارغة';document.getElementById('goods').textContent=money(g);document.getElementById('install').textContent=money(i);document.getElementById('grand').textContent=money(g+i)}
 document.getElementById('order').onsubmit=async e=>{
   e.preventDefault();
