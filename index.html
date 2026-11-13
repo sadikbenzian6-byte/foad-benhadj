@@ -1,128 +1,335 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FOAD BENHADJ</title><style>
-*{box-sizing:border-box}body{margin:0;background:#f3f5f7;color:#17212b;font-family:Tahoma,Arial}header{padding:55px 5%;color:white;background:linear-gradient(110deg,#101a25eF,#182b3bd9),url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1500&q=80') center/cover}h1{font-size:clamp(2.3rem,6vw,4rem);margin:10px 0}main{max-width:1100px;margin:25px auto;padding:0 15px}.layout{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #e0e6eb;border-radius:14px;overflow:hidden;padding:14px}.card{padding:0}.card img{width:100%;height:145px;object-fit:cover}.body{padding:14px}.line{display:flex;justify-content:space-between;margin:9px 0}button{border:0;border-radius:9px;padding:10px 14px;background:#d97706;color:white;font-weight:bold;cursor:pointer}.secondary{background:#e7edf2;color:#17212b}.qty{display:flex;gap:9px;align-items:center;margin-top:8px}.item{border-bottom:1px solid #e1e6eb;padding:10px 0}input,textarea{width:100%;padding:10px;border:1px solid #ccd5de;border-radius:8px;font:inherit;margin:5px 0 10px}.total{display:flex;justify-content:space-between;margin:10px 0}.grand{font-weight:bold;border-top:1px solid #ddd;padding-top:12px}.muted{color:#687582}.notice{padding:10px;background:#fff1d6;margin:10px 0;display:none}@media(max-width:760px){.layout{grid-template-columns:1fr}}
-</style></head><body><header><div>خدمات الترصيص الصحي</div><h1>FOAD BENHADJ</h1><p>اختر المنتجات واحسب سعر السلع والتركيب وأرسل طلبك.</p></header><main><h2>المنتجات والخدمات</h2><div id="notice" class="notice"></div><div class="layout"><section><div id="products" class="products">جارٍ تحميل المنتجات...</div></section><aside class="panel"><h2>🛒 السلة</h2><div id="cart" class="muted">السلة فارغة</div><div class="total"><span>مجموع السلع</span><b id="goods">0 دج</b></div><div class="total"><span>مجموع التركيب</span><b id="install">0 دج</b></div><div class="total grand"><span>الإجمالي</span><b id="grand">0 دج</b></div><h3>بيانات الزبون</h3><form id="order"><label>الاسم</label><input id="customer" required><label>رقم الهاتف</label><input id="phone" required type="tel"><label>العنوان (اختياري)</label><textarea id="address"></textarea><button style="width:100%">إرسال الطلب</button></form><p class="muted">سيتواصل معك صاحب المحل لتأكيد الطلب.</p></aside></div></main>
-<script>
-(async function bootstrapSite(){
-  function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error('تعذر تحميل ملف: '+src));document.head.appendChild(s);});}
-  if(!window.supabase){try{await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js');}catch(firstError){await loadScript('https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js');}}
-  window.SUPABASE_URL = "https://pbhqyfkqmdbquuzvqtod.supabase.co";
-  window.SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5OrQVUhsStQUxFKUC5e2vg_3fcwOq2z";
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17212b">
+  <title>FOAD BENHADJ</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f3f5f7;color:#17212b;font-family:Tahoma,Arial,sans-serif}
+    header{padding:48px 5%;color:#fff;background:linear-gradient(110deg,rgba(16,26,37,.94),rgba(24,43,59,.82)),url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1500&q=80') center/cover}
+    h1{font-size:clamp(2.2rem,6vw,4rem);margin:10px 0}
+    main{max-width:1100px;margin:25px auto;padding:0 15px}
+    .layout{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:start}
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+    .card,.panel{background:#fff;border:1px solid #e0e6eb;border-radius:14px;overflow:hidden}
+    .card{padding:0}.panel{padding:16px}
+    .card img{display:block;width:100%;height:145px;object-fit:cover;background:#e7edf2}
+    .body{padding:14px}
+    .line,.total{display:flex;justify-content:space-between;gap:10px;margin:9px 0}
+    button{border:0;border-radius:9px;padding:10px 14px;background:#d97706;color:#fff;font-weight:bold;cursor:pointer;font:inherit}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .secondary{background:#e7edf2;color:#17212b}
+    .qty{display:flex;gap:9px;align-items:center;margin-top:8px}
+    .item{border-bottom:1px solid #e1e6eb;padding:10px 0}
+    input,textarea{width:100%;padding:11px;border:1px solid #ccd5de;border-radius:8px;font:inherit;margin:5px 0 10px;background:#fff}
+    textarea{min-height:75px;resize:vertical}
+    .grand{font-weight:bold;border-top:1px solid #ddd;padding-top:12px}
+    .muted{color:#687582}.notice{padding:11px 13px;background:#fff1d6;color:#674400;border-radius:9px;margin:10px 0;display:none;overflow-wrap:anywhere}
+    .error{background:#ffeded;color:#8a2020}.success{background:#e9f8ee;color:#176331}
+    .empty{padding:18px;background:#fff;border-radius:10px;color:#687582}
+    @media(max-width:760px){.layout{grid-template-columns:1fr}header{padding:36px 5%}}
+  </style>
+</head>
+<body>
+  <header>
+    <div>خدمات الترصيص الصحي</div>
+    <h1>FOAD BENHADJ</h1>
+    <p>اختر المنتجات واحسب سعر السلع والتركيب وأرسل طلبك.</p>
+  </header>
 
-if (!window.supabase || !window.SUPABASE_URL || !window.SUPABASE_PUBLISHABLE_KEY) {
-  document.getElementById('products').textContent =
-    'تعذر تحميل إعدادات الموقع. حدّث الصفحة أو تواصل مع الإدارة.';
-  throw new Error('Supabase library failed to load');
-}
-const db = window.supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_PUBLISHABLE_KEY
-);let ps=[],cart={};const money=n=>Number(n||0).toLocaleString('fr-FR')+' دج';const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function note(t){let e=document.getElementById('notice');e.textContent=t;e.style.display='block'}
-async function load(){
-  const productsBox = document.getElementById('products');
-  productsBox.textContent = 'جارٍ تحميل المنتجات...';
-  try {
-    const {data,error} = await db.from('products').select('*').order('created_at',{ascending:false});
-    if(error) throw error;
-    ps = data || [];
-    productsBox.innerHTML = ps.length
-      ? ps.map(p=>`<article class="card"><img src="${esc(p.image_url||'')}" alt="${esc(p.name)}" onerror="this.style.display='none'"><div class="body"><h3>${esc(p.name)}</h3><div class="line"><span>سعر السلعة</span><b>${money(p.price)}</b></div><div class="line"><span>التركيب</span><b>${money(p.install_price)}</b></div><button onclick="add('${esc(p.id)}')">أضف للسلة</button></div></article>`).join('')
-      : '<p>لا توجد منتجات حالياً.</p>';
-    render();
-  } catch(error) {
-    productsBox.textContent = 'تعذر تحميل المنتجات: ' + (error.message || 'تحقق من اتصال الإنترنت.');
-    note(error.message || 'تعذر الاتصال بقاعدة البيانات.');
-  }
-}
-window.add = function(id) {
-  id = String(id);
-  cart[id] = (cart[id] || 0) + 1;
-  render();
-};
+  <main>
+    <h2>المنتجات والخدمات</h2>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <div class="layout">
+      <section>
+        <div id="products" class="products">
+          <div class="empty">جارٍ تحميل المنتجات...</div>
+        </div>
+      </section>
 
-window.change = function(id, d) {
-  id = String(id);
-  cart[id] = Math.max(0, (cart[id] || 0) + d);
-  if (!cart[id]) delete cart[id];
-  render();
-};
+      <aside class="panel">
+        <h2>🛒 السلة</h2>
+        <div id="cart" class="muted">السلة فارغة</div>
+        <div class="total"><span>مجموع السلع</span><b id="goods">0 دج</b></div>
+        <div class="total"><span>مجموع التركيب</span><b id="install">0 دج</b></div>
+        <div class="total grand"><span>الإجمالي</span><b id="grand">0 دج</b></div>
 
-function render() {
-  let entries = Object.entries(cart).filter(
-    ([id, q]) => q && ps.some(p => String(p.id) === String(id))
-  );
+        <h3>بيانات الزبون</h3>
+        <form id="order">
+          <label for="customer">الاسم</label>
+          <input id="customer" name="customer" autocomplete="name" required>
+          <label for="phone">رقم الهاتف</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+          <label for="address">العنوان (اختياري)</label>
+          <textarea id="address" name="address" autocomplete="street-address"></textarea>
+          <button id="submitOrder" type="submit" style="width:100%">إرسال الطلب</button>
+        </form>
+        <p class="muted">سيتواصل معك صاحب المحل لتأكيد الطلب.</p>
+      </aside>
+    </div>
+  </main>
 
-  let g = 0;
-  let i = 0;
+  <script>
+  (async function () {
+    'use strict';
 
-  document.getElementById('cart').innerHTML = entries.length
-    ? entries.map(([id, q]) => {
-        let p = ps.find(x => String(x.id) === String(id));
+    const SUPABASE_URL = 'https://pbhqyfkqmdbquuzvqtod.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_5OrQVUhsStQUxFKUC5e2vg_3fcwOq2z';
 
-        let price = Number(p.price || 0);
-        let installPrice = Number(p.install_price || 0);
+    const productsBox = document.getElementById('products');
+    const noticeBox = document.getElementById('notice');
+    const cartBox = document.getElementById('cart');
+    const orderForm = document.getElementById('order');
+    const submitButton = document.getElementById('submitOrder');
 
-        g += price * q;
-        i += installPrice * q;
+    let db;
+    let products = [];
+    const cart = Object.create(null);
+
+    const money = value => {
+      const number = Number(value);
+      return (Number.isFinite(number) ? number : 0).toLocaleString('fr-FR') + ' دج';
+    };
+
+    function showNotice(message, type) {
+      noticeBox.textContent = message;
+      noticeBox.className = 'notice' + (type ? ' ' + type : '');
+      noticeBox.style.display = 'block';
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      }[char]));
+    }
+
+    function safeImageURL(value) {
+      if (!value) return '';
+      try {
+        const url = new URL(String(value), window.location.href);
+        return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : '';
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function getProduct(id) {
+      return products.find(product => String(product.id) === String(id));
+    }
+
+    function renderProducts() {
+      if (!products.length) {
+        productsBox.innerHTML = '<div class="empty">لا توجد منتجات حالياً.</div>';
+        return;
+      }
+
+      productsBox.innerHTML = products.map(product => {
+        const id = escapeHTML(product.id);
+        const name = escapeHTML(product.name || 'منتج');
+        const image = safeImageURL(product.image_url);
+        const imageHTML = image
+          ? `<img src="${escapeHTML(image)}" alt="${name}" loading="lazy">`
+          : '<div class="empty">لا توجد صورة</div>';
 
         return `
-          <div class="item">
-            <b>${esc(p.name)}</b>
-            <div class="muted">
-              سلع ${money(price * q)} — تركيب ${money(installPrice * q)}
+          <article class="card">
+            ${imageHTML}
+            <div class="body">
+              <h3>${name}</h3>
+              <div class="line"><span>سعر السلعة</span><b>${money(product.price)}</b></div>
+              <div class="line"><span>التركيب</span><b>${money(product.install_price)}</b></div>
+              <button type="button" data-action="add" data-id="${id}">أضف للسلة</button>
             </div>
-            <div class="qty">
-              <button class="secondary" onclick="change('${esc(id)}',-1)">−</button>
-              ${q}
-              <button onclick="change('${esc(id)}',1)">＋</button>
-            </div>
-          </div>
-        `;
-      }).join('')
-    : 'السلة فارغة';
+          </article>`;
+      }).join('');
+    }
 
-  document.getElementById('goods').textContent = money(g);
-  document.getElementById('install').textContent = money(i);
-  document.getElementById('grand').textContent = money(g + i);
-}
-};
+    function renderCart() {
+      const entries = Object.entries(cart).filter(([id, quantity]) =>
+        quantity > 0 && getProduct(id)
+      );
 
-window.change = function(id, d) {
-  id = String(id);
-  cart[id] = Math.max(0, (cart[id] || 0) + d);
-  if (!cart[id]) delete cart[id];
-  render();
-function render(){let entries=Object.entries(cart).filter(([id,q])=>q&&ps.some(p=>String(p.id)===String(id))))),g=0,i=0;document.getElementById('cart').innerHTML=entries.length?entries.map(([id,q])=>{let p=ps.find(x=>x.id===id);g+=p.price*q;i+=p.install_price*q;return `<div class="item"><b>${esc(p.name)}</b><div class="muted">سلع ${money(p.price*q)} — تركيب ${money(p.install_price*q)}</div><div class="qty"><button class="secondary" onclick="change('${id}',-1)">−</button>${q}<button onclick="change('${id}',1)">＋</button></div></div>`}).join(''):'السلة فارغة';document.getElementById('goods').textContent=money(g);document.getElementById('install').textContent=money(i);document.getElementById('grand').textContent=money(g+i)}
-document.getElementById('order').onsubmit=async e=>{
-  e.preventDefault();
-  const customerName = document.getElementById('customer').value.trim();
-  const customerPhone = document.getElementById('phone').value.trim();
-  const customerAddress = document.getElementById('address').value.trim();
-  const items = Object.entries(cart)
-    .filter(([id,q])=>q && ps.some(p=>String(p.id)===String(id)))
-    .map(([id,quantity])=>{
-      const p=ps.find(x=>String(x.id)===String(id));
-      return {product_id:id,name:p.name,quantity,unit_price:p.price,unit_install_price:p.install_price};
+      let goodsTotal = 0;
+      let installTotal = 0;
+
+      if (!entries.length) {
+        cartBox.textContent = 'السلة فارغة';
+        cartBox.className = 'muted';
+      } else {
+        cartBox.className = '';
+        cartBox.innerHTML = entries.map(([id, quantity]) => {
+          const product = getProduct(id);
+          const price = Number(product.price) || 0;
+          const installPrice = Number(product.install_price) || 0;
+          goodsTotal += price * quantity;
+          installTotal += installPrice * quantity;
+
+          return `
+            <div class="item">
+              <b>${escapeHTML(product.name || 'منتج')}</b>
+              <div class="muted">سلع ${money(price * quantity)} — تركيب ${money(installPrice * quantity)}</div>
+              <div class="qty">
+                <button class="secondary" type="button" data-action="decrease" data-id="${escapeHTML(id)}">−</button>
+                <span>${quantity}</span>
+                <button type="button" data-action="increase" data-id="${escapeHTML(id)}">＋</button>
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      document.getElementById('goods').textContent = money(goodsTotal);
+      document.getElementById('install').textContent = money(installTotal);
+      document.getElementById('grand').textContent = money(goodsTotal + installTotal);
+    }
+
+    function changeQuantity(id, amount) {
+      const key = String(id);
+      if (!getProduct(key)) return;
+      cart[key] = Math.max(0, (cart[key] || 0) + amount);
+      if (cart[key] === 0) delete cart[key];
+      renderCart();
+    }
+
+    document.addEventListener('click', event => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+
+      const id = button.dataset.id;
+      switch (button.dataset.action) {
+        case 'add':
+        case 'increase':
+          changeQuantity(id, 1);
+          break;
+        case 'decrease':
+          changeQuantity(id, -1);
+          break;
+      }
     });
-  if(!items.length){note('أضف منتجاً إلى السلة أولاً.');return}
-  const goods=items.reduce((s,x)=>s+x.unit_price*x.quantity,0);
-  const install=items.reduce((s,x)=>s+x.unit_install_price*x.quantity,0);
-  const submitButton=e.target.querySelector('button[type="submit"],button:not([type])');
-  if(submitButton) submitButton.disabled=true;
-  try {
-    const {error}=await db.from('orders').insert({
-      customer_name:customerName, phone:customerPhone, address:customerAddress,
-      items, goods_total:goods, install_total:install, grand_total:goods+install
-    });
-    if(error) throw error;
-    cart={}; render(); e.target.reset(); note('تم إرسال الطلب بنجاح.');
-  } catch(error) {
-    note('تعذر إرسال الطلب: ' + (error.message || 'تحقق من الاتصال وحاول مجدداً.'));
-  } finally {
-    if(submitButton) submitButton.disabled=false;
-  }
-};
-load();
 
-})().catch(error=>{const target=document.getElementById('products')||document.getElementById('notice');if(target){target.textContent='تعذر تشغيل الموقع: '+(error.message||'تحقق من اتصال الإنترنت ثم أعد المحاولة.');target.style.display='block';}});
-</script></body></html>
+    async function loadProducts() {
+      productsBox.innerHTML = '<div class="empty">جارٍ تحميل المنتجات...</div>';
+
+      try {
+        let result = await db.from('products').select('*').order('created_at', { ascending: false });
+
+        // إذا لم يكن عمود created_at موجوداً، أعد المحاولة دون الترتيب.
+        if (result.error && /created_at|column/i.test(result.error.message || '')) {
+          result = await db.from('products').select('*');
+        }
+
+        if (result.error) throw result.error;
+
+        products = Array.isArray(result.data) ? result.data : [];
+        renderProducts();
+        renderCart();
+
+        if (!products.length) {
+          showNotice('اتصل الموقع بقاعدة البيانات، لكن جدول المنتجات لا يحتوي على منتجات ظاهرة للزبائن.', '');
+        } else {
+          noticeBox.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Products loading error:', error);
+        productsBox.innerHTML = '<div class="empty">تعذر تحميل المنتجات.</div>';
+        showNotice(
+          'خطأ أثناء تحميل المنتجات: ' + (error.message || 'تحقق من اتصال الإنترنت وصلاحيات قراءة جدول products في Supabase.'),
+          'error'
+        );
+      }
+    }
+
+    orderForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const customerName = document.getElementById('customer').value.trim();
+      const customerPhone = document.getElementById('phone').value.trim();
+      const customerAddress = document.getElementById('address').value.trim();
+
+      const items = Object.entries(cart)
+        .filter(([id, quantity]) => quantity > 0 && getProduct(id))
+        .map(([id, quantity]) => {
+          const product = getProduct(id);
+          return {
+            product_id: id,
+            name: product.name,
+            quantity,
+            unit_price: Number(product.price) || 0,
+            unit_install_price: Number(product.install_price) || 0
+          };
+        });
+
+      if (!items.length) {
+        showNotice('أضف منتجاً إلى السلة أولاً.', 'error');
+        return;
+      }
+
+      const goodsTotal = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
+      const installTotal = items.reduce((sum, item) => sum + item.unit_install_price * item.quantity, 0);
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'جارٍ إرسال الطلب...';
+
+      try {
+        const { error } = await db.from('orders').insert({
+          customer_name: customerName,
+          phone: customerPhone,
+          address: customerAddress,
+          items: items,
+          goods_total: goodsTotal,
+          install_total: installTotal,
+          grand_total: goodsTotal + installTotal
+        });
+
+        if (error) throw error;
+
+        Object.keys(cart).forEach(id => delete cart[id]);
+        renderCart();
+        orderForm.reset();
+        showNotice('تم إرسال الطلب بنجاح. شكراً لك!', 'success');
+      } catch (error) {
+        console.error('Order submission error:', error);
+        showNotice('تعذر إرسال الطلب: ' + (error.message || 'تحقق من الاتصال وحاول مجدداً.'), 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'إرسال الطلب';
+      }
+    });
+
+    try {
+      // تحميل مكتبة Supabase مع بديل إذا تعذر تحميل المصدر الأول.
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('تعذر تحميل مكتبة الاتصال بقاعدة البيانات.'));
+          document.head.appendChild(script);
+        });
+      }
+
+      if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+        try {
+          await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js');
+        } catch (_) {
+          await loadScript('https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js');
+        }
+      }
+
+      if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+        throw new Error('مكتبة Supabase غير متاحة. تحقق من اتصال الإنترنت.');
+      }
+
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      await loadProducts();
+    } catch (error) {
+      console.error('Site startup error:', error);
+      productsBox.innerHTML = '<div class="empty">تعذر تشغيل الموقع.</div>';
+      showNotice(error.message || 'تعذر تشغيل الموقع. تحقق من اتصال الإنترنت.', 'error');
+    }
+  })();
+  </script>
+</body>
+</html>
