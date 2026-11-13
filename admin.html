@@ -82,7 +82,11 @@ async function deleteOrder(id){
   note('تم حذف الطلب بنجاح.');
 }
 // إتاحة الدالة لزر الحذف المولّد داخل قائمة الطلبات
+// إتاحة الدوال للأزرار داخل الصفحة
+window.updateOrder = updateOrder;
 window.deleteOrder = deleteOrder;
+window.editProduct = editProduct;
+window.deleteProduct = deleteProduct;
 db.auth.getSession().then(({data})=>{if(data.session)openDash()}).catch(error=>note('تعذر استعادة جلسة المدير: '+(error.message||'أعد تحميل الصفحة.')));
 
 })().catch(error=>{const target=document.getElementById('products')||document.getElementById('notice');if(target){target.textContent='تعذر تشغيل الموقع: '+(error.message||'تحقق من اتصال الإنترنت ثم أعد المحاولة.');target.style.display='block';}});
